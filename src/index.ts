@@ -16,6 +16,10 @@ const app = new Elysia()
   .get('/', ()=>Bun.file(VIEWS_PATH + "/home.html"))
   .get('/add-product', ()=>Bun.file(VIEWS_PATH + "/add-product.html"))
   .get('/edit/:id', ()=>Bun.file(VIEWS_PATH + "/edit-product.html"))
+  .get('/delete/:id', ({params, db, set})=>{
+    db.deleteproduct(parseInt(params.id));
+    set.redirect = '/';
+  })
 
   .post('/add-product',({db, body, set})=>{
     db.addproduct(<Product>body);
