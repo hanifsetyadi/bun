@@ -5,22 +5,29 @@ export interface Product{
     name: string,
     price: number,
     image: string
-
 }
 
-export class productDatabase{
+export class ProductsDatabase{
     private db: Database;
 
     constructor(){
         this.db = new Database("Products.sqlite");
-        this.createTable();
+        this.createTable()
     }
 
-    async addProduct(product: Product){
-        return this.db.query(`INSERT INTO products(name, price, image) VALUES (?,?,?) RETURNING id`).get(product.name, product.price, product.image) as Product;
+    fetchAllProducts(){
+        return this.db.query(`SELECT * FROM products`).all();
+    }
+
+    addproduct(product: Product){
+        return this.db.query(
+            `INSERT INTO products(name, price, image) VALUES(?,?,?) RETURNING id`
+        ).get(product.name, product.price, product.image) as Product;
     }
 
     createTable(){
-        return this.db.run("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, price NUM, image TEXT)")
+        return this.db.run(
+            'CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, price NUM, image TEXT)'
+        )
     }
 }
