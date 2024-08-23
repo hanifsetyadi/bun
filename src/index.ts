@@ -15,12 +15,19 @@ const app = new Elysia()
   .get('/script.js', ()=>Bun.file(import.meta.dir+'/script.js').text())
   .get('/', ()=>Bun.file(VIEWS_PATH + "/home.html"))
   .get('/add-product', ()=>Bun.file(VIEWS_PATH + "/add-product.html"))
-  .get('/edit', ()=>Bun.file(VIEWS_PATH + "/edit-product.html"))
+  .get('/edit/:id', ()=>Bun.file(VIEWS_PATH + "/edit-product.html"))
 
   .post('/add-product',({db, body, set})=>{
     db.addproduct(<Product>body);
     set.redirect = '/';
   })
+  .post(
+    '/edit/:id',
+    ({db,body,set,params})=>{
+      db.updateproduct(parseInt(params.id), <Product>body);
+      set.redirect = '/';
+    }
+    )
 
   .listen(3000);
 
