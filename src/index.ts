@@ -1,6 +1,7 @@
-import { html } from "@elysiajs/html";
+// import { html } from "@elysiajs/html";
 import staticPlugin from "@elysiajs/static";
 import { Elysia } from "elysia";
+import { productDatabase } from "./db";
 
 const VIEWS_PATH = import.meta.dir + "/../public/views";
 
@@ -9,6 +10,7 @@ const app = new Elysia()
   .use(staticPlugin({
     prefix : '/'
   }))
+  .decorate("db", new productDatabase())
   .get('/', ()=>Bun.file(VIEWS_PATH + "/home.html"))
   .get('/add-product', ()=>Bun.file(VIEWS_PATH + "/add-product.html"))
   .get('/edit', ()=>Bun.file(VIEWS_PATH + "/edit-product.html"))
